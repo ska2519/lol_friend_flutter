@@ -4,7 +4,6 @@
 GET {{baseUrl}}/summoner/v4/summoners/by-name/{{name}}
 X-Riot-Token: {{api_key}}
 
-
 ###
 GET {{baseUrl}}/match/v4/matchlists/by-account/{{encryptedAccountId}}
 X-Riot-Token: {{api_key}}
