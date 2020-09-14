@@ -1,9 +1,14 @@
 @name = 돼지튀김반미
 @encryptedAccountId = AIwmA8BIbJZWQG48lWD024_VgcR1B8YVsf78YRJIH-px
+@matchid = 4640561499
 
 GET {{baseUrl}}/summoner/v4/summoners/by-name/{{name}}
 X-Riot-Token: {{api_key}}
 
 ###
 GET {{baseUrl}}/match/v4/matchlists/by-account/{{encryptedAccountId}}
+X-Riot-Token: {{api_key}}
+
+###
+GET {{baseUrl}}/match/v4/matches/{{matchid}}
 X-Riot-Token: {{api_key}}
