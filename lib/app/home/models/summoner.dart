@@ -1,9 +1,9 @@
 
 class Summoner{
-  Summoner({this.id, this.accountId, this.puuid, this.name, this.profileIconId, this.revisionDate, this.summonerLevel});
+  Summoner({this.summonerId, this.accountId, this.puuid, this.name, this.profileIconId, this.revisionDate, this.summonerLevel});
   
     
-   final String id;
+   final String summonerId;
    final String accountId;
    final String puuid;
    final String name;
