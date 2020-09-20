@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lol_friend_flutter/app/home/tab_item.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:lol_friend_flutter/app/ui/dashboard.dart';
+import 'package:lol_friend_flutter/app/home/account/account_page.dart';
 
 bool get isIos => foundation.defaultTargetPlatform == foundation.TargetPlatform.iOS;
 
@@ -26,17 +26,17 @@ class CupertinoHomeScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     int currentTabIndex = 2;
     List<Widget> tabs = [
-        Dashboard(),
-        Dashboard(),
-        Dashboard(),
+        AccountPage(),
+        AccountPage(),
+        AccountPage(),
     ];
 
     if(isIos){
       return CupertinoTabScaffold(
         tabBar: CupertinoTabBar(
           items: [
-            _buildItem(TabItem.jobs),
-            _buildItem(TabItem.entry),
+            _buildItem(TabItem.search),
+            _buildItem(TabItem.chat),
             _buildItem(TabItem.account),
           ],
           //enum value can be accessed by index
@@ -61,8 +61,8 @@ class CupertinoHomeScaffold extends StatelessWidget {
                   currentIndex: currentTabIndex,
                   backgroundColor: Colors.grey[50],
                   items: [
-                    _buildItem(TabItem.jobs),
-                    _buildItem(TabItem.entry),
+                    _buildItem(TabItem.search),
+                    _buildItem(TabItem.chat),
                     _buildItem(TabItem.account),
                   ],
                 ),

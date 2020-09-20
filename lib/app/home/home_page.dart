@@ -1,9 +1,9 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:lol_friend_flutter/app/home/cupertino_home_scaffold.dart';
-import 'package:lol_friend_flutter/app/home/tab_item.dart';
-import 'package:lol_friend_flutter/app/ui/dashboard.dart';
-
-
+import 'package:lol_friend_flutter/app/home/message/message_page.dart';
+import 'package:lol_friend_flutter/app/home/search/search_page.dart';
+import 'package:lol_friend_flutter/app/home/account/account_page.dart';
+import 'package:lol_friend_flutter/app/home/account/account_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,48 +11,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TabItem _currentTab = TabItem.jobs;
-
-  //각 탭에 대한 global key를 배정 후 Map을 CupertinoHomeScaffold에 argument(인수)로 전달
-  final Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
-    TabItem.jobs: GlobalKey<NavigatorState>(),
-    TabItem.entry: GlobalKey<NavigatorState>(),
-    TabItem.account: GlobalKey<NavigatorState>(),
-  };
-
-  //define a map that we can use to get the correct.
-  //can declare the widget builders as key value pairs
-  Map<TabItem, WidgetBuilder> get widgetBuilders {
-    return {
-      TabItem.jobs: (_) => Dashboard(),
-      TabItem.entry: (context) => Dashboard(),
-      TabItem.account: (_) => Dashboard(),
-    };
-  }
-
-  //tab switching
-  void _select(TabItem tabItem) {
-    if (tabItem == _currentTab) {
-      //pop to first route
-      navigatorKeys[tabItem].currentState.popUntil((route) => route.isFirst);
-    }
-    setState(() => _currentTab = tabItem);
-  }
-
   @override
   Widget build(BuildContext context) {
-    //Control back button on Android
-    //close and return a future of type boll
-    //called Every time we press on the back button
-    return WillPopScope(
-      //- maybePop() more than 1 route -> pop and return true / rotue 0 시 false 하지만 !<< 때문에 true
-      onWillPop: () async => !await navigatorKeys[_currentTab].currentState.maybePop(),
-      child: CupertinoHomeScaffold(
-        currentTab: _currentTab,
-        onSelectTab: _select,
-        widgetBuilders: widgetBuilders,
-        navigatorKeys: navigatorKeys,
+    return Scaffold(
+      appBar: AppBar(toolbarHeight: 50,backgroundColor: Colors.white,
+        bottom: TabBar(isScrollable: false,
+          indicatorColor: Colors.white,
+          labelColor: Color(0xFFFE3C72),
+          unselectedLabelColor: Colors.grey,
+          tabs: [      
+            Tab(icon: Icon(EvaIcons.activity)),
+            Tab(icon: Icon(EvaIcons.loaderOutline)),
+            Tab(icon: Icon(EvaIcons.personOutline)),
+          ],
+        ),
       ),
+    body: TabBarView(
+    physics: NeverScrollableScrollPhysics(),
+    children: [
+      SearchPage(),
+      MessagePage(),
+      AccountPage(),
+    ],
+    ),
     );
   }
 }
