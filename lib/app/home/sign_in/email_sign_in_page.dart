@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'email_sign_in_form_change_notifier.dart';
+import 'package:lol_friend_flutter/app/home/sign_in/email_sign_in_form_change_notifier.dart';
 
 class EmailSignInPage extends StatelessWidget {
   @override

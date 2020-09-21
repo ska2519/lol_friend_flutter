@@ -1,17 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lol_friend_flutter/app/home/home_page.dart';
-import 'package:lol_friend_flutter/app/home/models/summoner.dart';
-import 'package:lol_friend_flutter/app/repositories/data_repository.dart';
-import 'package:lol_friend_flutter/app/services/api.dart';
-import 'package:lol_friend_flutter/app/services/api_service.dart';
+import 'package:lol_friend_flutter/app/landing_page.dart';
 import 'package:provider/provider.dart';
-
 import 'app/services/auth.dart';
 
 void main() {
+  // `runApp()` 전에 호출한다.
   WidgetsFlutterBinding.ensureInitialized();
+  
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       statusBarColor: Color(0xFFF01579B),
@@ -32,24 +29,16 @@ class MyApp extends StatelessWidget { //ignore: must_be_immutable
           return CircularProgressIndicator();
         }
         if (snapshot.connectionState == ConnectionState.done) {
-          return MultiProvider(
-            providers: [
-              Provider<AuthBase>(
-                create: (context) => Auth()),
-              Provider<DataRepository>(
-                create:(_) => DataRepository(
-                apiService: APIService(API.development()))),
-              Provider<Summoner>(
-                create: (_) => Summoner()),
-            ],
+          return Provider<AuthBase>(
+            create: (context) => Auth(),
             child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'lol friend',
-            theme: ThemeData(),
-            home: DefaultTabController(
-              length: 3,
-              child: HomePage(),
-            ),
+              debugShowCheckedModeBanner: false,
+              title: 'lol friend',
+              theme: ThemeData(),
+              home: DefaultTabController(
+                length: 3,
+                child: LandingPage(),
+              ),
             ),
           );
         }

@@ -8,6 +8,7 @@ class FirestoreService {
   //FirestoreService 싱글 톤 생성
   static final instance = FirestoreService._();
 
+  
   // _setData 메소드는 많은 복사 붙여 넣기 코드를 피하는 좋은 방법
   //_setData() defines a single entry point for all writers to Firestore (useful for logging/debugging)
   Future<void> setData({

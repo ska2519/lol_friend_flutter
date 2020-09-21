@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
 
@@ -30,9 +31,6 @@ class SignInManager {
       rethrow;
     }
   }
-
-  Future<User> signInAnonymously() async =>
-      await _signIn(auth.signInAnonymously);
 
   Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
 

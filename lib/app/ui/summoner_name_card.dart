@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lol_friend_flutter/app/home/models/summoner.dart';
-import 'package:lol_friend_flutter/app/home/models/summoner_league.dart';
+import 'package:lol_friend_flutter/app/home/models/summonerLeague.dart';
 import 'package:provider/provider.dart';
 
 

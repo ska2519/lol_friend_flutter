@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lol_friend_flutter/app/home/models/user.dart';
+import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/profile.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/userGender.dart';
 
@@ -10,7 +10,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  User _user, _currentUser;
+  UserProfile _user;
   int difference;
 
 

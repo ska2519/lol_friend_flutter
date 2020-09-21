@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'email_sign_in_change_model.dart';
+import 'package:lol_friend_flutter/app/home/sign_in/email_sign_in_model.dart';
 import 'package:lol_friend_flutter/common_widgets/firebaseauth_exception_alert_dialog.dart';
 import 'package:lol_friend_flutter/common_widgets/form_submit_button.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';

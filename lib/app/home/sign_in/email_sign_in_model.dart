@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:lol_friend_flutter/app/sign_in/email_sign_in_model.dart';
-import 'validators.dart';
+import 'package:lol_friend_flutter/app/home/sign_in/validators.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
+
+enum EmailSignInFormType { signIn, register }
 
 class EmailSignInChangeModel with EmailAndPasswordValidators, ChangeNotifier {
   EmailSignInChangeModel({

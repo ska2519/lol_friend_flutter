@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:lol_friend_flutter/app/home/models/match_list.dart';
+import 'package:lol_friend_flutter/app/home/models/matchList.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lol_friend_flutter/app/home/models/summoner.dart';
-import 'package:lol_friend_flutter/app/home/models/summoner_league.dart';
+import 'package:lol_friend_flutter/app/home/models/summonerLeague.dart';
 import 'package:lol_friend_flutter/app/services/api.dart';
 import 'package:http/http.dart' as http;
 import 'api_keys.dart';
@@ -70,7 +70,7 @@ class APIService{
    throw response;
   }
 
-  Future<MatchList> getMatchDataByAccount({
+  Future<MatchList> getMatchListDataByAccount({
     @required String accountId}) async {
     final uri = api.getMatchDataByAccountUri(accountId);
     final response = await http.get(
@@ -81,6 +81,9 @@ class APIService{
       final Map<String, dynamic> data = json.decode(response.body);
       if(data.isNotEmpty){
         List<dynamic> matches = data['matches'];
+        // int startIndex = data['startIndex'];
+        // int endIndex = data['endIndex'];
+        // int totalGames = data['totalGames'];
         print('테스트 ${matches[2]}');
         for(var match in matches){
           return MatchList(

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:lol_friend_flutter/app/home/models/summoner.dart';
-import 'package:lol_friend_flutter/app/home/models/summoner_league.dart';
+import 'package:lol_friend_flutter/app/home/models/summonerLeague.dart';
 import 'package:lol_friend_flutter/app/services/api_service.dart';
 
 class DataRepository{
