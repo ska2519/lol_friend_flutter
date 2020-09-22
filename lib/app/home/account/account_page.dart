@@ -46,9 +46,6 @@ class _AccountPageState extends State<AccountPage> {
       providers:[
         Provider<Summoner>(
           create: (_)=> Summoner()),
-        Provider<DataRepository>(
-                create:(_) => DataRepository(
-                apiService: APIService(API.development()))),
         Provider<SummonerLeague>(
           create: (_)=> SummonerLeague()),
       ],
@@ -64,10 +61,10 @@ class _AccountPageState extends State<AccountPage> {
               children: [
                 SizedBox(height: 10.0),
                 Container(height: 90.0,
-                child: user == null ? Hero(
-                   tag: 'launcherHero',
-                  child: Image.asset('assets/icons/launcher_icon.png')) : _buildUserInfo(user)),
-
+                  child: Hero(
+                    tag: 'launcherHero',
+                    child: Image.asset('assets/icons/launcher_icon.png')),
+                ),
                 SizedBox(height: 30.0),
               TextFormField(
                 key: _formKey,
@@ -126,7 +123,7 @@ class _AccountPageState extends State<AccountPage> {
                     }
                   ),
                   Text('본인의 소환사 아이디를 등록해 주세요.',
-                    style: GoogleFonts.notoSans(fontSize: 17),
+                    style: TextStyle(fontSize: 15),
                   ),
                 ],
               ),

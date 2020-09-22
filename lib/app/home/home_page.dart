@@ -1,8 +1,12 @@
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lol_friend_flutter/app/home/message/message_page.dart';
 import 'package:lol_friend_flutter/app/home/search/search_page.dart';
 import 'package:lol_friend_flutter/app/home/account/account_page.dart';
+import 'package:lol_friend_flutter/app/repositories/data_repository.dart';
+import 'package:lol_friend_flutter/app/services/api.dart';
+import 'package:lol_friend_flutter/app/services/api_service.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -23,9 +27,9 @@ class _HomePageState extends State<HomePage> {
           labelColor: Color(0xFFFE3C72),
           unselectedLabelColor: Colors.grey,
           tabs: [      
-            Tab(icon: Icon(EvaIcons.activity)),
-            Tab(icon: Icon(EvaIcons.messageCircleOutline)),
-            Tab(icon: Icon(EvaIcons.personOutline)),
+            Tab(icon: Icon(FontAwesomeIcons.burn)),
+            Tab(icon: Icon(FontAwesomeIcons.meteor)),
+            Tab(icon: Icon(FontAwesomeIcons.userAstronaut)),
           ],
         ),
       ),
@@ -34,7 +38,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           SearchPage(),
           MessagePage(),
-          AccountPage(),
+          Provider<DataRepository>(
+                create:(_) => DataRepository(
+                apiService: APIService(API.development())),
+                child: AccountPage(),),
         ],
       ),
     );

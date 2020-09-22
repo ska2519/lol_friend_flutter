@@ -19,7 +19,7 @@ void main() {
 
 class MyApp extends StatelessWidget { //ignore: must_be_immutable
   Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget { //ignore: must_be_immutable
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'lol friend',
-              theme: ThemeData(),
+              theme: ThemeData(fontFamily: 'Jua'),
               home: DefaultTabController(
                 length: 3,
                 child: LandingPage(),

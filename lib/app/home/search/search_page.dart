@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/profile.dart';
-import 'package:lol_friend_flutter/app/ui/widgets/userGender.dart';
+
 
 class SearchPage extends StatefulWidget {
   @override
@@ -20,71 +21,61 @@ class _SearchPageState extends State<SearchPage> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      
       children: [
         profileWidget(
-            padding: size.height * 0.005,
-            photoHeight: size.height * 0.59,
-            photoWidth: size.width * 0.99,
-            photo: _user != null ? _user.photo : 'https://cdn.pixabay.com/photo/2015/01/15/12/44/model-600222_960_720.jpg',
-            clipRadius: size.height * 0.02,
-            containerHeight: size.height * 0.3,
-            containerWidth: size.width * 0.9,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-        SizedBox(
-          height: size.height * 0.06,
-        ),
-        Row(
-          children: <Widget>[
-            userGender(_user != null ?_user.gender : 'Female'),
-            Expanded(
-              child: Text(
-                " " +
-                    '_user.name' +
-                    ", ",
-                    
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: size.height * 0.05),
-              ),
-            )
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            Icon(
-              Icons.location_on,
-              color: Colors.white,
+          padding: 3.3,
+          photoHeight: size.height * 0.77,
+          photo: _user != null ? _user.photo : 'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+          clipRadius: size.height * 0.02,
+          containerHeight: size.height * 0.3,
+          containerWidth: size.width * 0.9,
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children:[
+                    Expanded(
+                      child: Text(
+                        _user != null ? _user.name : '오미드 아르민',
+                          style: GoogleFonts.jua(
+                            textStyle:TextStyle(
+                              color: Colors.white,
+                              fontSize: 30
+                              ),
+                          ),
+                      ),
+                    ),
+                  ]      
+                ),  
+                
+                Row(
+                  children:[
+                    Icon(
+                      FontAwesomeIcons.mapMarkerAlt,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      difference != null
+                          ? (difference / 1000).floor().toString() + 'km 거리에 있음'
+                          : '27km 거리에 있음',
+                      style: GoogleFonts.jua(
+                            textStyle:TextStyle(
+                              color: Colors.white,
+                              fontSize: 17
+                              ),
+                          ),
+                    )
+                  ],
+                ),
+                SizedBox(height: size.height * 0.01), 
+              ],
             ),
-            Text(
-              difference != null
-                  ? (difference / 1000).floor().toString() +
-                      "km away"
-                  : "away",
-              style: TextStyle(color: Colors.white),
-            )
-          ],
-        ),
-        SizedBox(
-          height: size.height * 0.05,
-        ),
-        
-                ],
-              ),
-            ),
-        ),
-        Card(
-          child:
-          Column(
-            children: [
-              Placeholder(fallbackHeight: size.height * 0.17)
-            ],
           ),
         ),
+        //Card(child: Placeholder(fallbackHeight: size.height * 0.17)),
         Container(
           height: size.height * 0.11,
           child: Row(
