@@ -1,16 +1,14 @@
-# lol_friend_flutter
+# lol Friend Flutter Project
 
-A new Flutter project.
+리그오브 레전드 게임 사용자들이 팀원을 찾을 수 있습니다.  
+게임 사용자끼리 함께 게임 플레이를 원할 시에 메시지를 주고 받을 수 있습니다.  
+매칭 시스템은 Tinder App을 참고 하였습니다.
 
-## Getting Started
+## Beta
 
-This project is a starting point for a Flutter application.
+10월 초에 구글 플레이스토어 베타 출시를 목표로 개발 중 👨‍💻 
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+[MIT](https://choosealicense.com/licenses/mit/) 👨‍💻
