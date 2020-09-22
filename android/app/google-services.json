@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "440483809445",
+    "firebase_url": "https://lol-friend-flutter.firebaseio.com",
+    "project_id": "lol-friend-flutter",
+    "storage_bucket": "lol-friend-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440483809445:android:1dc6f7c6d03429d75c654c",
+        "android_client_info": {
+          "package_name": "com.example.lol_friend_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440483809445-0theoqurg9pbv4aaqimug79v0rdokcgf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lol_friend_flutter",
+            "certificate_hash": "56a66154f85217a3b14b6668f7307d98940e798c"
+          }
+        },
+        {
+          "client_id": "440483809445-indc12ml2jmmr3o51tc0vhujk1d7urek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqzLmh6bYtBo9DaDwI-8zi3GQRM7WEGfc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440483809445-indc12ml2jmmr3o51tc0vhujk1d7urek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

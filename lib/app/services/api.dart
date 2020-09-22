@@ -18,6 +18,13 @@ class API{
     path: 'lol/summoner/v4/summoners/by-name/${summonersName != null ? summonersName : name}',
   );
 
+  Uri getSummonerLeagueDataByName (summonerId) => Uri(
+    scheme: 'https',
+    host: host,
+    path: 'lol/league/v4/entries/by-summoner/${summonerId != null ? summonerId : null}',
+  );
+
+
   Uri getMatchDataByAccountUri (accountId) => Uri(
     scheme: 'https',
     host: host,
