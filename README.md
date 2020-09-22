@@ -6,7 +6,9 @@
 
 ## Beta
 
-10월 초에 구글 플레이스토어 베타 출시를 목표로 개발 중 👨‍💻 
+10월 초에 구글 플레이스토어 베타 출시를 목표로 개발 중 👨‍💻
+
+![ex_screenshot](./lol_friend_200922_01.PNG)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![ex_screenshot](./lol_friend_200922_02.PNG)
 
 
 
