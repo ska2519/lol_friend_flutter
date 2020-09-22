@@ -7,8 +7,8 @@
 ## Firebase 기반
 핵심 기능 : 서로 좋아요 한 사람끼리 매칭, 채팅방, 리그오브레전드 전적 제공
 
-상태관리 - Provider, Stream
-데이터베이스 - Cloud Firestore, FirebaseStorage
+상태관리 - Provider, Stream   
+데이터베이스 - Cloud Firestore, FirebaseStorage   
 Dart http 패키지로 Riot API를 사용하여 리그오브레전드 아이디 전적 검색을 구현
 
 ## Beta
