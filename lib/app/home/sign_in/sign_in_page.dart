@@ -82,7 +82,7 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: Colors.grey[50],
       body: _buildContent(context),
       );
@@ -102,7 +102,7 @@ class SignInPage extends StatelessWidget {
           _buildHeader(),
           SizedBox(height: 50.0),
           Text(                       
-            '회원가입을 누르시면 이용약관에 동의하는 것으로\n 간주됩니다. 롤 친구의 개인정보 취급방침 및 쿠키\n 정책에서 회원 정보 처리 방법을 확인하실 수 있습니다.',
+            '로그인을 누르시면 이용약관에 동의하는 것으로\n 간주됩니다. 롤 친구의 개인정보 취급방침 및 쿠키\n 정책에서 회원 정보 처리 방법을 확인하실 수 있습니다.',
             textAlign: TextAlign.center,style: 
             TextStyle(
               fontSize: 14.0,
@@ -111,7 +111,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 20.0),
           SocialSignInButton(
             assetName: 'images/google-logo.png',
-            text: 'Google 계정으로 회원가입',
+            text: 'Google 계정으로 로그인',
             textColor: Colors.black87,
             color: Colors.white,
             // 로딩 중 버튼 비 활성화
@@ -120,7 +120,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 10.0),
           SocialSignInButton(
             assetName: 'images/facebook-logo.png',
-            text: 'Facebook 계정으로 회원가입',
+            text: 'Facebook 계정으로 로그인',
             textColor: Colors.white,
             color: Color(0xFF334D92),
             onPressed: () => isLoading ? null : _signInWithFacebook(context),
@@ -128,7 +128,7 @@ class SignInPage extends StatelessWidget {
           SizedBox(height: 10.0),
           SignInButton(
             key: emailPasswordKey,
-            text: 'Email로 회원가입',
+            text: 'Email로 로그인',
             textColor: Colors.white,
             color: Colors.teal[700],
             onPressed: () => isLoading ? null : _signInWithEmail(context),
@@ -149,7 +149,7 @@ class SignInPage extends StatelessWidget {
       textAlign: TextAlign.left,
       style: TextStyle(
         fontSize: 25.0,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
     );
   }

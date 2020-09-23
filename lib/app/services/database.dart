@@ -1,12 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
-import 'package:lol_friend_flutter/app/services/api_path.dart';
-import 'package:lol_friend_flutter/app/home/models/job.dart';
-import 'package:lol_friend_flutter/app/home/models/entry.dart';
-import 'api_path.dart';
-import 'firestore_service.dart';
 
 //  Database API Design
 //strongly typed data models such as <Job> class
@@ -16,17 +12,8 @@ import 'firestore_service.dart';
 //따라서 해당 데이터베이스를 변경해도 나머지 코드에는 영향을 미치지 않습니다.
 abstract class DataBase {
   Future<void> setUserProfile(UserProfile userProfile);
-  
-  Future<void> setJob(Job job);
-  Future<void> deleteJob(Job job);
-  Stream<Job> jobStream({@required String jobId});
-  Stream<List<Job>> jobsStream();
-
-  Future<void> setEntry(Entry entry);
-  Future<void> deleteEntry(Entry entry);
-  Stream<List<Entry>> entriesStream({Job job});
+  Future<UserProfile> getUserProfile(uid);
 }
-
 //document ID 날짜로 저장
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
@@ -34,15 +21,6 @@ class FirestoreDatabase implements DataBase {
   FirestoreDatabase({@required this.uid}) : assert(uid != null);
   final String uid;
 
-  // Firestore Service - repository 라고도 부름 -백엔드의 데이터에 액세스
-  final _service = FirestoreService.instance;
-  
-
-  // @override
-  // Future<void> setUserProfile(UserProfile userProfile) async => await _service.setData(
-  //   path: APIPath.userProfile(userProfile.name),
-  //   data: null
-  // );
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   //profile setup
@@ -54,7 +32,7 @@ class FirestoreDatabase implements DataBase {
         .child('userPhotos')
         .child(userProfile.uid)
         .child(userProfile.uid)
-        .putFile(userProfile.photo);
+        .putFile(File(userProfile.photo));
 
     return await storageUploadTask.onComplete.then((ref) async {
       await ref.ref.getDownloadURL().then((url) async {
@@ -71,50 +49,57 @@ class FirestoreDatabase implements DataBase {
     });
   }
 
-  @override
-  Future<void> setJob(Job job) async => await _service.setData(
-        path: APIPath.job(uid, job.id),
-        data: job.toMap(),
-      );
+  Future<List> getChosenList(uid) async {
+    List<String> chosenList = [];
+    await _firestore.collection('users').doc(uid).collection('chosenList')
+      .get().then((docs) {
+        for (var doc in docs.docs) {
+          if (docs.docs != null) {
+            chosenList.add(doc.id);
+          }
+        }
+      });
+  return chosenList;
+  }
+
+  Future getUserInterests(uid) async {
+    UserProfile _currentuserProfile = UserProfile();
+    await _firestore.collection('users').doc(uid).get().then((user){ 
+      _currentuserProfile.name = user.get('name');
+      _currentuserProfile.photo = user.get('photoUrl');
+      _currentuserProfile.gender = user.get('gender');
+      _currentuserProfile.interestedIn = user.get('interestedIn');
+    });
+    return _currentuserProfile;
+  }
 
   @override
-  Future<void> deleteJob(Job job) async => await _service.deleteData(
-        path: APIPath.job(uid, job.id),
-      );
-  @override
-  Stream<Job> jobStream({@required String jobId}) => _service.documentStream(
-        path: APIPath.job(uid, jobId),
-        builder: (data, documentId) => Job.fromMap(data, documentId),
-      );
-
-  @override
-  Stream<List<Job>> jobsStream() => _service.collectionStream(
-      path: APIPath.jobs(uid), builder: (data, documentId) => Job.fromMap(data, documentId));
-
-  @override
-  Future<void> setEntry(Entry entry) async => await _service.setData(
-        path: APIPath.entry(uid, entry.id),
-        data: entry.toMap(),
-      );
-
-  @override
-  Future<void> deleteEntry(Entry entry) async =>
-      await _service.deleteData(path: APIPath.entry(uid, entry.id));
-
-  @override
-  //gets all entries for user, optionally filtering by job
-  //job 인수로 필터링해서 job이 있는 항목만 스트림
-  Stream<List<Entry>> entriesStream({Job job}) => _service.collectionStream<Entry>(
-        path: APIPath.entries(uid),
-        queryBuilder: job != null
-            //jobId 값이 있는 entry 값을 entries list로 만듬 - queryBuilder로 필터링
-            ? (query) => query.where('jobId', isEqualTo: job.id)
-            : null,
-        //jobId로 필터링 된 entries data에서 entryId(documentId)를 스트림하는 빌더
-
-        builder: (data, documentId) => Entry.fromMap(data, documentId),
-        //  list.dart안에 있는 sort 메서드로 지정한 순서(lhs, rhs)에 따라 목록을 정렬
-        // Stream<List<Entry>> 안의 1hs는 시작 rhs는 끝 - 시작일자로 비교해서 정렬(sorting)
-        sort: (lhs, rhs) => rhs.start.compareTo(lhs.start),
-      );
+   Future<UserProfile> getUserProfile(uid) async {
+    final instance = FirebaseFirestore.instance;
+    UserProfile userProfile = UserProfile();
+    List<String> chosenList = await getChosenList(uid);
+    UserProfile currentUser = await getUserInterests(uid);
+   
+    await instance.collection('users').get().then((users){
+      for (var user in users.docs) {
+       
+         if ((!chosenList.contains(user.id)) &&
+             (user.id != uid) &&
+             (currentUser.interestedIn == user.get('gender')))
+        {
+          Timestamp age = user.get('age');
+          DateTime ageDateTime = age.toDate();
+          userProfile.uid = user.id;
+          userProfile.name = user.get('name');
+          userProfile.photo = user.get('photoUrl');
+          userProfile.age =  ageDateTime;
+          userProfile.location = user.get('location');
+          userProfile.gender = user.get('gender');
+          userProfile.interestedIn = user.get('interestedIn');
+          break;
+        }
+      }
+    });
+    return userProfile;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/landing_page.dart';
 import 'package:provider/provider.dart';
 import 'app/services/auth.dart';
@@ -30,14 +31,16 @@ class MyApp extends StatelessWidget { //ignore: must_be_immutable
         }
         if (snapshot.connectionState == ConnectionState.done) {
           return Provider<AuthBase>(
-            create: (context) => Auth(),
+            create: (_) => Auth(),
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'lol friend',
               theme: ThemeData(fontFamily: 'Jua'),
               home: DefaultTabController(
                 length: 3,
-                child: LandingPage(),
+                child: Provider<UserProfile>(
+                  create: (_) => UserProfile(),
+                  child: LandingPage()),
               ),
             ),
           );

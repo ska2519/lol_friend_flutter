@@ -14,29 +14,29 @@ class PhotoWidget extends StatelessWidget {
       cache: true,
       enableSlideOutPage: true,
       filterQuality: FilterQuality.high,
-      loadStateChanged: (ExtendedImageState state) {
-        switch (state.extendedImageLoadState) {
-          case LoadState.loading:
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-            break;
-          case LoadState.completed:
-            return null;
-            break;
-          case LoadState.failed:
-            return GestureDetector(
-              child: Center(
-                child: Text("Reload"),
-              ),
-              onTap: () {
-                state.reLoadImage();
-              },
-            );
-            break;
-        }
-        return Text("");
-      },
+      // loadStateChanged: (ExtendedImageState state) {
+      //   switch (state.extendedImageLoadState) {
+      //     case LoadState.loading:
+      //       return Center(
+      //         child: CircularProgressIndicator(),
+      //       );
+      //       break;
+      //     case LoadState.completed:
+      //       return null;
+      //       break;
+      //     case LoadState.failed:
+      //       return GestureDetector(
+      //         child: Center(
+      //           child: Text("Reload"),
+      //         ),
+      //         onTap: () {
+      //           state.reLoadImage();
+      //         },
+      //       );
+      //       break;
+      //   }
+      //   return Text("");
+      // },
     );
   }
 }

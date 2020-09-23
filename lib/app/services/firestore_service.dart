@@ -60,6 +60,21 @@ class FirestoreService {
     final Stream<DocumentSnapshot> snapshots = reference.snapshots();
     return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
   }
+
+  Future<T> getCollection<T>({
+    @required String path,
+    @required T builder(Map<String, dynamic> data, String documentID),
+    String uid}){
+    final CollectionReference reference = FirebaseFirestore.instance.collection(path);
+     reference.get().then((collection) {
+       final result = collection.docs.
+       map((snapshot) => builder(snapshot.data(), snapshot.id))
+          .where((value) => value != null)
+          .toList();
+       return result;
+    });
+   
+  }
 }
 
 // docSnapshot에 있는 리스트를 각각의 Job 으로 생성

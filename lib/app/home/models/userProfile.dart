@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -8,7 +7,7 @@ class UserProfile {
   String name;
   String gender;
   String interestedIn;
-  File photo;
+  String photo;
   DateTime age;
   GeoPoint location;
   UserProfile({
@@ -27,7 +26,7 @@ class UserProfile {
     String name,
     String gender,
     String interestedIn,
-    File photo,
+    String photo,
     DateTime age,
     GeoPoint location,
   }) {
@@ -55,19 +54,20 @@ class UserProfile {
   }
 
   factory UserProfile.fromMap(Map<String, dynamic> data, String documentId) {
-    final File photo = data['photo'];
-    final DateTime age = data['age'];
+    final String name = data['name'];
+    final String gender = data['gender'];
+    final String interestedIn = data['interestedIn'];
+    final String photo = data['photoUrl'];
+    final DateTime age = data['age'].toDate();
     final GeoPoint location = data['location'];
 
     if (data == null) return null;
-    final String name = data['name'];
-    if (name == null) return null;
 
     return UserProfile(
-      uid: data['uid'],
-      name: data['name'],
-      gender: data['gender'],
-      interestedIn: data['interestedIn'],
+      uid: documentId,
+      name: name,
+      gender: gender,
+      interestedIn: interestedIn,
       photo: photo,
       age: age,
       location: location,
