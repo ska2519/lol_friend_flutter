@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lol_friend_flutter/app/home/account/profile_page.dart';
 import 'package:lol_friend_flutter/app/home/message/message_page.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/home/search/search_page.dart';
@@ -18,9 +17,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-  
-  final userProfile = Provider.of<UserProfile>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 50,backgroundColor: Colors.white,
@@ -36,17 +32,15 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: TabBarView(
+      body: 
+      TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        children: [
-          userProfile == null ? ProfilePage.show(context) 
-                :     
-                SearchPage(),
-                MessagePage(),
-                Provider<DataRepository>(
-                      create:(_) => DataRepository(
-                      apiService: APIService(API.development())),
-                      child: AccountPage(),),
+        children: [    
+          SearchPage(),
+          MessagePage(),
+          Provider<DataRepository>(create:(_) => DataRepository(
+            apiService: APIService(API.development())),
+            child: AccountPage(),),
         ],
       ),
     );

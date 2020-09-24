@@ -12,7 +12,6 @@ import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 //따라서 해당 데이터베이스를 변경해도 나머지 코드에는 영향을 미치지 않습니다.
 abstract class DataBase {
   Future<void> setUserProfile(UserProfile userProfile);
-  Future<UserProfile> getUserProfile(uid);
 }
 //document ID 날짜로 저장
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
@@ -47,59 +46,5 @@ class FirestoreDatabase implements DataBase {
         });
       });
     });
-  }
-
-  Future<List> getChosenList(uid) async {
-    List<String> chosenList = [];
-    await _firestore.collection('users').doc(uid).collection('chosenList')
-      .get().then((docs) {
-        for (var doc in docs.docs) {
-          if (docs.docs != null) {
-            chosenList.add(doc.id);
-          }
-        }
-      });
-  return chosenList;
-  }
-
-  Future getUserInterests(uid) async {
-    UserProfile _currentuserProfile = UserProfile();
-    await _firestore.collection('users').doc(uid).get().then((user){ 
-      _currentuserProfile.name = user.get('name');
-      _currentuserProfile.photo = user.get('photoUrl');
-      _currentuserProfile.gender = user.get('gender');
-      _currentuserProfile.interestedIn = user.get('interestedIn');
-    });
-    return _currentuserProfile;
-  }
-
-  @override
-   Future<UserProfile> getUserProfile(uid) async {
-    final instance = FirebaseFirestore.instance;
-    UserProfile userProfile = UserProfile();
-    List<String> chosenList = await getChosenList(uid);
-    UserProfile currentUser = await getUserInterests(uid);
-   
-    await instance.collection('users').get().then((users){
-      for (var user in users.docs) {
-       
-         if ((!chosenList.contains(user.id)) &&
-             (user.id != uid) &&
-             (currentUser.interestedIn == user.get('gender')))
-        {
-          Timestamp age = user.get('age');
-          DateTime ageDateTime = age.toDate();
-          userProfile.uid = user.id;
-          userProfile.name = user.get('name');
-          userProfile.photo = user.get('photoUrl');
-          userProfile.age =  ageDateTime;
-          userProfile.location = user.get('location');
-          userProfile.gender = user.get('gender');
-          userProfile.interestedIn = user.get('interestedIn');
-          break;
-        }
-      }
-    });
-    return userProfile;
   }
 }

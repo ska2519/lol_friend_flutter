@@ -9,7 +9,6 @@ import 'package:lol_friend_flutter/app/home/sign_in/sign_in_page.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
 import 'package:lol_friend_flutter/app/services/database.dart';
 import 'package:lol_friend_flutter/app/ui/summoner_name_card.dart';
-import 'package:lol_friend_flutter/common_widgets/avatar.dart';
 import 'package:lol_friend_flutter/common_widgets/platform_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -43,14 +42,16 @@ class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {      
     final user = Provider.of<User>(context, listen: false);
-
-      Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
+    final database = Provider.of<DataBase>(context, listen: false);
+    final userProfile = Provider.of<UserProfile>(context, listen: false);
+    
+    Future<void> _signOut(BuildContext context) async {
+      try {
+        final auth = Provider.of<AuthBase>(context, listen: false);
+        await auth.signOut();
+      } catch (e) {
+        print(e.toString());
+      }
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
@@ -133,8 +134,8 @@ class _AccountPageState extends State<AccountPage> {
                     : 
                     ProfilePage.show(context,
                     user: user,
-                    database: Provider.of<DataBase>(context, listen: false),
-                    userProfile: Provider.of<UserProfile>(context, listen: false));
+                    database: database,
+                    userProfile: userProfile);
                   }
                 ),
                 Text('본인의 소환사 아이디를 등록해 주세요.',
@@ -160,24 +161,5 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
       );
-    
-  }
-
-    _buildUserInfo(User user) {
-    return Column(
-      children: [
-        Avatar(
-          photoUrl: user.photoUrl,
-          radius: 25.0,
-        ),
-        SizedBox(height: 8.0),
-        if (user.displayName != null)
-          Text(
-            user.displayName,
-            style: TextStyle(fontSize: 15.0, color: Colors.black),
-          ),
-        SizedBox(height: 8.0),
-      ],
-    );
   }
 }

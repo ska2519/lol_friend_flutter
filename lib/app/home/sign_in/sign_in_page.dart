@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as aut;
 import 'package:flutter/material.dart';
 import 'package:lol_friend_flutter/app/home/sign_in/email_sign_in_page.dart';
 import 'package:lol_friend_flutter/app/home/sign_in/sign_in_button.dart';
@@ -24,13 +24,15 @@ class SignInPage extends StatelessWidget {
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
+    
     return ChangeNotifierProvider<ValueNotifier<bool>>(
       // create 시 init value 뒤에 적어줘야함?? 지금은 안하면 일단 에러
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
         //isLoading 값이 변경될 때 마다 Provider를 실행해 SignInManager 에 isLoading 값 전달
         builder: (_, isLoading, __) => Provider<SignInManager>(
-          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading,
+          context: context ),
           //Consumer로 SignInManager 변경 시 작업 지정
           child: Consumer<SignInManager>(
             //builder는 <ValueNotifier<bool>> 변경 될 때 같이 호출 딤 /SignInPage 도 rebuild
@@ -43,7 +45,7 @@ class SignInPage extends StatelessWidget {
   }
 
     //sign_in_page에서 오류 처리 하는 이유는 context가 필요
-  void _showSignInError(BuildContext context, FirebaseAuthException exception) {
+  void _showSignInError(BuildContext context, aut.FirebaseAuthException exception) {
     FirebaseAuthExceptionAlertDialog(
       title: 'Sign in failed',
       exception: exception,
@@ -53,7 +55,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       await manager.signInWithGoogle();
-    } on FirebaseAuthException catch (e) {
+    } on aut.FirebaseAuthException catch (e) {
       if (e.code != 'ERROR_ABORTED_BY_USER') {
         _showSignInError(context, e);
       }
@@ -63,7 +65,7 @@ class SignInPage extends StatelessWidget {
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
       await manager.signInWithFacebook();
-    } on FirebaseAuthException catch (e) {
+    } on aut.FirebaseAuthException catch (e) {
       if (e.code != 'ERROR_ABORTED_BY_USER') {
         _showSignInError(context, e);
       }
@@ -81,8 +83,10 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
+    
+    return 
+    
+    Scaffold(
       backgroundColor: Colors.grey[50],
       body: _buildContent(context),
       );

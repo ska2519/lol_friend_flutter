@@ -1,12 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:lol_friend_flutter/app/home/account/profile_page.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class SignInManager {
-  SignInManager({@required this.auth, @required this.isLoading});
+  SignInManager({@required this.context,@required this.auth, @required this.isLoading});
   final AuthBase auth;
   final ValueNotifier<bool> isLoading;
+  final BuildContext context;
 
 /*
   // ValueNotifier 로 StreamController + stream 대체
@@ -21,10 +25,18 @@ class SignInManager {
 */
 
   //Future<User> 대한 Function을 인자로 반환하는 함수를 전달하는 것입니다.
-  Future<User> _signIn(Future<User> Function() signInMethod) async {
+  Future<User> _signIn(Future<User> Function() signInMethod, context) async {
+    final user = Provider.of<User>(context);
     try {
       isLoading.value = true;
-      return await signInMethod();
+      return await signInMethod().whenComplete(() {
+        {
+          isLoading.value = false;
+          if(user.displayName == null)
+          ProfilePage.show(context,user: user);
+        }
+      });
+      
     } catch (e) {
       isLoading.value = false;
       // 호출 코드까지 예외를 전달하는 방법
@@ -32,8 +44,8 @@ class SignInManager {
     }
   }
 
-  Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle);
+  Future<User> signInWithGoogle() async => await _signIn(auth.signInWithGoogle, context);
 
   Future<User> signInWithFacebook() async =>
-      await _signIn(auth.signInWithFacebook);
+      await _signIn(auth.signInWithFacebook, context);
 }

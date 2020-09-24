@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
-class UserProfile {
+class UserProfile extends ChangeNotifier{
   String uid;
   String name;
   String gender;
