@@ -1,4 +1,4 @@
-# lol Friend Flutter Project
+# Game Friend Flutter Project
 
 이용하는 게임 사용자들끼리 팀원을 찾을 수 있습니다.  
 앱 사용자끼리 함께 게임 플레이를 원할 시에 메시지를 주고 받을 수 있습니다.  
