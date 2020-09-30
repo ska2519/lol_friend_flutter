@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 

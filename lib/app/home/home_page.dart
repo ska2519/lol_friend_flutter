@@ -12,20 +12,20 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
-    _tabController = new TabController(length: 3,vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Provider<DataRepository>
-    (create:(_) => DataRepository(
-      apiService: APIService(API.development())),
-        child: Scaffold(
+    return Provider<DataRepository>(
+      create: (_) => DataRepository(apiService: APIService(API.development())),
+      child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 50,
           backgroundColor: Colors.white,
@@ -35,18 +35,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             indicatorColor: Colors.white,
             labelColor: Color(0xFFFE3C72),
             unselectedLabelColor: Colors.grey,
-            tabs: [      
+            tabs: [
               Tab(icon: Icon(FontAwesomeIcons.burn)),
               Tab(icon: Icon(FontAwesomeIcons.meteor)),
               Tab(icon: Icon(FontAwesomeIcons.userAstronaut)),
             ],
           ),
         ),
-        body: 
-        TabBarView(
+        body: TabBarView(
           controller: _tabController,
           physics: NeverScrollableScrollPhysics(),
-          children: [    
+          children: [
             SearchPage(),
             MatchPage(),
             AccountPage(),
@@ -56,6 +55,3 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 }
-      
-    
-  

@@ -8,48 +8,46 @@ import 'app/services/auth.dart';
 void main() {
   // `runApp()` 전에 호출한다.
   WidgetsFlutterBinding.ensureInitialized();
-  
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFED6A6A),
-    )
-  );
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Color(0xFFED6A6A),
+  ));
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget { //ignore: must_be_immutable
+// ignore: must_be_immutable
+class MyApp extends StatelessWidget {
   Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
+        future: _initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Provider<AuthBase>(
+              create: (_) => Auth(),
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'lol friend',
+                theme: ThemeData(
+                  fontFamily: 'Jua',
+                  brightness: Brightness.light,
+                  primaryColor: Color(0xFFED6A6A),
+                  accentColor: Color(0xFFA71736),
+                  primarySwatch: Colors.amber,
+                ),
+                home: DefaultTabController(
+                  length: 3,
+                  child: LandingPage(),
+                ),
+              ),
+            );
+          }
           return CircularProgressIndicator();
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Provider<AuthBase>(
-            create: (_) => Auth(),
-            child: MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'lol friend',
-              theme: ThemeData(
-                fontFamily: 'Jua',
-                brightness: Brightness.light,
-                primaryColor: Color(0xFFED6A6A),
-                accentColor: Color(0xFFA71736),
-                primarySwatch: Colors.amber,
-              ),
-              home: DefaultTabController(
-                length: 3,
-                child: LandingPage(),
-              ),
-            ),
-          );
-        }
-        return CircularProgressIndicator();
-      }
-    );
+        });
   }
 }

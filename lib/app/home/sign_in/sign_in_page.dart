@@ -8,12 +8,11 @@ import 'package:lol_friend_flutter/app/services/auth.dart';
 import 'package:lol_friend_flutter/common_widgets/firebaseauth_exception_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
-
 class SignInPage extends StatelessWidget {
   const SignInPage({
     Key key,
-     @required this.manager,
-     @required this.isLoading,
+    @required this.manager,
+    @required this.isLoading,
   }) : super(key: key);
 
   final SignInManager manager;
@@ -24,14 +23,12 @@ class SignInPage extends StatelessWidget {
 
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
-    
+
     return ChangeNotifierProvider<ValueNotifier<bool>>(
-      // create 시 init value 뒤에 적어줘야함?? 지금은 안하면 일단 에러
       create: (_) => ValueNotifier<bool>(false),
       child: Consumer<ValueNotifier<bool>>(
-        //isLoading 값이 변경될 때 마다 Provider를 실행해 SignInManager 에 isLoading 값 전달
         builder: (_, isLoading, __) => Provider<SignInManager>(
-          //lazy: false,
+          lazy: false,
           create: (_) => SignInManager(auth: auth, isLoading: isLoading),
           //Consumer로 SignInManager 변경 시 작업 지정
           child: Consumer<SignInManager>(
@@ -44,8 +41,9 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-    //sign_in_page에서 오류 처리 하는 이유는 context가 필요
-  void _showSignInError(BuildContext context, aut.FirebaseAuthException exception) {
+  //sign_in_page에서 오류 처리 하는 이유는 context가 필요
+  void _showSignInError(
+      BuildContext context, aut.FirebaseAuthException exception) {
     FirebaseAuthExceptionAlertDialog(
       title: 'Sign in failed',
       exception: exception,
@@ -59,6 +57,7 @@ class SignInPage extends StatelessWidget {
       _showSignInError(context, e);
     }
   }
+
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       await manager.signInWithGoogle();
@@ -90,16 +89,13 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
-    return 
-    
-    Scaffold(
+    return Scaffold(
       backgroundColor: Colors.grey[50],
       body: _buildContent(context),
-      );
+    );
   }
 
-    Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(20.0),
       child: Column(
@@ -107,15 +103,15 @@ class SignInPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Hero(
-            tag: 'launcherHero',
-            child: Image.asset('assets/icons/launcher_icon.png',height: 90)),
+              tag: 'launcherHero',
+              child: Image.asset('assets/icons/launcher_icon.png', height: 90)),
           SizedBox(height: 50.0),
           _buildHeader(),
           SizedBox(height: 50.0),
-          Text(                       
+          Text(
             '로그인을 누르시면 이용약관에 동의하는 것으로\n 간주됩니다. 롤 친구의 개인정보 취급방침 및 쿠키\n 정책에서 회원 정보 처리 방법을 확인하실 수 있습니다.',
-            textAlign: TextAlign.center,style: 
-            TextStyle(
+            textAlign: TextAlign.center,
+            style: TextStyle(
               fontSize: 14.0,
             ),
           ),
@@ -156,14 +152,14 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-    Widget _buildHeader() {
+  Widget _buildHeader() {
     if (isLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
     return Text(
-      '소환사 등록을 하려면\n회원가입이 필요합니다',
+      '서비스 이용을 하려면\n회원가입이 필요합니다',
       textAlign: TextAlign.left,
       style: TextStyle(
         fontSize: 25.0,

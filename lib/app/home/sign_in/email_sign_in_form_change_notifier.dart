@@ -23,7 +23,8 @@ class EmailSignInChangeNotifier extends StatefulWidget {
   }
 
   @override
-  _EmailSignInChangeNotifierState createState() => _EmailSignInChangeNotifierState();
+  _EmailSignInChangeNotifierState createState() =>
+      _EmailSignInChangeNotifierState();
 }
 
 class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
@@ -61,8 +62,9 @@ class _EmailSignInChangeNotifierState extends State<EmailSignInChangeNotifier> {
   //email 작성 후 다음 버튼 누르면 패스워드 칸으로 포커스 이동
   void _emailEditingComplete() {
     //email 유효성 검사 실패 시 이메일 칸에 포커스 고정
-    final newFocus =
-        model.emailValidators.isValid(model.email) ? _passwordFocusNode : _emailFocusNode;
+    final newFocus = model.emailValidators.isValid(model.email)
+        ? _passwordFocusNode
+        : _emailFocusNode;
     FocusScope.of(context).requestFocus(newFocus);
   }
 

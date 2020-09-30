@@ -8,7 +8,6 @@ abstract class FormatBase {
 }
 
 class Format /*implements FormatBase*/ {
-
   // @override
   String hours(double hours) {
     final hoursNotNegative = hours < 0.0 ? 0.0 : hours;

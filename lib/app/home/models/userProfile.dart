@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-class UserProfile extends ChangeNotifier{
+class UserProfile extends ChangeNotifier {
   String uid;
   String name;
   String gender;
@@ -20,7 +20,6 @@ class UserProfile extends ChangeNotifier{
     this.age,
     this.location,
   });
-
 
   UserProfile copyWith({
     String uid,
@@ -85,25 +84,25 @@ class UserProfile extends ChangeNotifier{
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-  
+
     return o is UserProfile &&
-      o.uid == uid &&
-      o.name == name &&
-      o.gender == gender &&
-      o.interestedIn == interestedIn &&
-      o.photo == photo &&
-      o.age == age &&
-      o.location == location;
+        o.uid == uid &&
+        o.name == name &&
+        o.gender == gender &&
+        o.interestedIn == interestedIn &&
+        o.photo == photo &&
+        o.age == age &&
+        o.location == location;
   }
 
   @override
   int get hashCode {
     return uid.hashCode ^
-      name.hashCode ^
-      gender.hashCode ^
-      interestedIn.hashCode ^
-      photo.hashCode ^
-      age.hashCode ^
-      location.hashCode;
+        name.hashCode ^
+        gender.hashCode ^
+        interestedIn.hashCode ^
+        photo.hashCode ^
+        age.hashCode ^
+        location.hashCode;
   }
 }

@@ -10,9 +10,9 @@ Widget profileWidget(
         boxShadow: [
           BoxShadow(
             color: Colors.black54,
-            blurRadius: 2.0,
-            spreadRadius: 1.0,
-            offset: Offset(2.0, 2.0),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: Offset(3.0, 3.0),
           )
         ],
         borderRadius: BorderRadius.circular(clipRadius),

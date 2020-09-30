@@ -8,7 +8,6 @@ class FirestoreService {
   //FirestoreService 싱글 톤 생성
   static final instance = FirestoreService._();
 
-  
   // _setData 메소드는 많은 복사 붙여 넣기 코드를 피하는 좋은 방법
   //_setData() defines a single entry point for all writers to Firestore (useful for logging/debugging)
   Future<void> setData({
@@ -61,19 +60,11 @@ class FirestoreService {
     return snapshots.map((snapshot) => builder(snapshot.data(), snapshot.id));
   }
 
-  Future<T> getCollection<T>({
-    @required String path,
-    @required T builder(Map<String, dynamic> data, String documentID),
-    String uid}){
-    final CollectionReference reference = FirebaseFirestore.instance.collection(path);
-     reference.get().then((collection) {
-       final result = collection.docs.
-       map((snapshot) => builder(snapshot.data(), snapshot.id))
-          .where((value) => value != null)
-          .toList();
-       return result;
-    });
-   
+  Future getDocument({@required String path}) async {
+    final DocumentReference reference = FirebaseFirestore.instance.doc(path);
+    final DocumentSnapshot document = await reference.get();
+    final Map<String, dynamic> data = document.data();
+    return data;
   }
 }
 

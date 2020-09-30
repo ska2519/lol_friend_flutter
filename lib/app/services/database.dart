@@ -13,11 +13,13 @@ import 'package:lol_friend_flutter/app/services/firestore_service.dart';
 // TOPTIP! FbStore db와 서비스(repository)를 분리하여 데이터베이스 API는 동일하게 유지
 //따라서 해당 데이터베이스를 변경해도 나머지 코드에는 영향을 미치지 않습니다.
 abstract class DataBase {
-  Future<void> setUserProfile(File photo, String uid, String name, String gender,
-      String interestedIn, DateTime age, GeoPoint location);
+  Future<UserProfile> getUserProfile({@required String uid});
+  Future<void> setUserProfile(File photo, String uid, String name,
+      String gender, String interestedIn, DateTime age, GeoPoint location);
   Future<bool> isNotFirstTime(String uid);
   Stream<UserProfile> userProfileStream({@required String uid});
 }
+
 //document ID 날짜로 저장
 String documentIdFromCurrentDate() => DateTime.now().toIso8601String();
 
@@ -34,11 +36,18 @@ class FirestoreDatabase implements DataBase {
       exist = user.exists;
     });
     return exist;
-  }  
+  }
+
   //profile setup
-  @override  
-  Future<void> setUserProfile(File photo, String uid, String name, String gender,
-      String interestedIn, DateTime age, GeoPoint location) async {
+  @override
+  Future<void> setUserProfile(
+      File photo,
+      String uid,
+      String name,
+      String gender,
+      String interestedIn,
+      DateTime age,
+      GeoPoint location) async {
     StorageUploadTask storageUploadTask;
     storageUploadTask = FirebaseStorage.instance
         .ref()
@@ -63,8 +72,17 @@ class FirestoreDatabase implements DataBase {
   }
 
   @override
-  Stream<UserProfile> userProfileStream({@required String uid}) => 
-  _service.documentStream(
+  Future<UserProfile> getUserProfile({@required String uid}) async {
+    final data = await _service.getDocument(
+      path: APIPath.userProfile(uid),
+    );
+    UserProfile userProfile = UserProfile.fromMap(data, uid);
+    return userProfile;
+  }
+
+  @override
+  Stream<UserProfile> userProfileStream({@required String uid}) =>
+      _service.documentStream(
         path: APIPath.userProfile(uid),
         builder: (data, documentId) => UserProfile.fromMap(data, documentId),
       );

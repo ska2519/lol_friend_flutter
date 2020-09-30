@@ -19,22 +19,17 @@ class PhotoWidget extends StatelessWidget {
       loadStateChanged: (ExtendedImageState state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
             break;
           case LoadState.completed:
             return null;
             break;
           case LoadState.failed:
             return GestureDetector(
-              child: Center(
-                child: Text("다시 로딩하기"),
-              ),
-              onTap: () {
-                state.reLoadImage();
-              },
-            );
+                child: Center(child: Text("다시 로딩하기")),
+                onTap: () {
+                  state.reLoadImage();
+                });
             break;
         }
         return Text("");

@@ -11,9 +11,7 @@ Widget genderWidget(icon, text, size, selected, onTap) {
           size: size.height * 0.12,
           color: selected == text ? Colors.white : Colors.black54,
         ),
-        SizedBox(
-          height: size.height * 0.02,
-        ),
+        SizedBox(height: size.height * 0.02),
         Text(
           text,
           style: TextStyle(
