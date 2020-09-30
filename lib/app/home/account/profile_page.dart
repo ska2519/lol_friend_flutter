@@ -3,17 +3,18 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:lol_friend_flutter/app/home/home_page.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
-
 import 'package:lol_friend_flutter/app/services/auth.dart';
 import 'package:lol_friend_flutter/app/services/database.dart';
-import 'package:lol_friend_flutter/app/ui/widgets/gender.dart';
-
+import 'package:lol_friend_flutter/app/ui/widgets/profile.dart';
 import 'package:lol_friend_flutter/common_widgets/form_submit_button.dart';
-
+import 'package:lol_friend_flutter/common_widgets/platform_exception_alert_dialog.dart';
+import 'package:chips_choice/chips_choice.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key key, this.database, this.userProfile, this.user}) : super(key: key);
@@ -27,6 +28,7 @@ class ProfilePage extends StatefulWidget {
     DataBase database,
     UserProfile userProfile,
   }) async {
+
     await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         fullscreenDialog: true,
@@ -38,246 +40,268 @@ class ProfilePage extends StatefulWidget {
       ),
     );
   }
-    
+   
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 
 class _ProfilePageState extends State<ProfilePage> {
-  
-  final TextEditingController _nameController = TextEditingController();
+  final _formkey = GlobalKey<FormState>();
   PlatformFile photo;
-  File myFile;
   DateTime age;
   String gender, interestedIn;
   GeoPoint location;
-  
-
+  String labelName = '이름';
   bool isLoading;
   bool submitted;
-  
+  String name;
+  File myFile;
+
+
   @override
   void initState() { 
     super.initState();
+     if (widget.userProfile != null) {
+      name = widget.userProfile.name;
+    
+    }
     _getLocation();
   }
+
   _getLocation() async {
-    
     Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     location = GeoPoint(position.latitude, position.longitude);
     print(location);
-  }   
+  }
+
+  bool _validateAndSaveForm() {
+    final form = _formkey.currentState;
+    if (form.validate()) {
+      form.save();
+      print('form: $form');
+      return true;
+    }
+    return false;
+  }
 
   Future<void> _submit() async {
-    final user = widget.user;
-    await widget.database.setUserProfile(UserProfile(
-      name: _nameController.text,
-      age: age,
-      gender: gender,
-      interestedIn: interestedIn,
-      location: location,
-      photo: photo.path,
-      uid: user.uid,
-      ),
-    );
-    Navigator.pop(context);
+    //final user = Provider.of<User>(context, listen: false);
+    if (_validateAndSaveForm()) {
+      try {
+        await widget.database.setUserProfile(
+          myFile, widget.user.uid, name, gender, interestedIn, age, location             
+        );
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+        
+      } on PlatformException catch (e) {
+        PlatformExceptionAlertDialog(
+          title: 'Operation failed',
+          exception: e,
+        ).show(context);
+      }
+    }
   }
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    
-    return Scaffold(
-      backgroundColor: Colors.grey[500],
-      body: SingleChildScrollView(
-        //scrollDirection: Axis.vertical,
-        child: Column(
+
+    return Form(
+      key: _formkey,
+          child: Scaffold(
+        appBar: AppBar(
+        title: Text(widget.userProfile == null ? '프로필 작성' : '프로필 보기'),
+        actions: widget.userProfile == null ? [
+           IconButton(icon: Icon(FontAwesomeIcons.save),
+          onPressed: _submit) 
+        ] : null,
+      ),
+        backgroundColor: Colors.grey[50],
+        body: SingleChildScrollView(
+          //scrollDirection: Axis.vertical,
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              child: CircleAvatar(
-                radius: size.width * 0.5,
-                backgroundColor: Colors.transparent,
-                child: 
-                  photo == null ? GestureDetector(
-                    onTap: () async {
-                      FilePickerResult pickerResult = await FilePicker.platform.pickFiles(
-                        type: FileType.image,
-                      );
-                      if (pickerResult != null) {
-                        setState(() {
-                          photo = pickerResult.files.first;
-                            print(photo.path);
-                        });
-                      }
-                    },
-                  child: Image.asset('assets/profilephoto.png'),
-                  )
-                  : GestureDetector(
-                    onTap: () async {
-                      FilePickerResult pickerResult = await FilePicker.platform.pickFiles(
-                        type: FileType.image,
-                      );
-                    if (pickerResult != null) {
-                      setState(() {
-                        photo = pickerResult.files.first;
-                      });
-                    }
-                  },
-                  child: CircleAvatar(
-                    radius: size.width * 0.3,
-                    backgroundImage: FileImage(myFile = File(photo.path)),
-                  )
-                ),
-              )
-            ),
-            textFieldWidget(_nameController, "Name", size),
-            FormSubmitButton(text: "생일을 입력해주세요",
-              onPressed: (){
-                DatePicker.showDatePicker(
-                  context,
-                  showTitleActions: true,
-                  minTime: DateTime(1900, 1, 1),
-                  maxTime: DateTime(DateTime.now().year - 19, 1, 1),
-                  onConfirm: (date) {
-                    setState(() {
-                      age = date;
-                    });
-                    print(age);
-                  },
-                );
+              child: widget.userProfile == null ? GestureDetector(
+                onTap: () async {
+                  FilePickerResult pickerResult = await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                if (pickerResult != null) {
+                  setState(() {
+                    photo = pickerResult.files.first;
+                    myFile = File(photo.path);
+                  });
+                }
               },
-            ),
-              
-          
-            SizedBox(height: 10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: size.height * 0.02),
-                  child: Text(
-                    "You Are",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: size.width * 0.09),
+              child: photo != null
+                ? Container( 
+                  padding: const EdgeInsets.all(3.3),
+                 // height: size.height * 0.57,
+                  width: size.height * 0.77,
+                  child: Image.file(myFile),)
+                : profileWidget(
+                      padding: 3.3,
+                      photoHeight:size.height * 0.57,
+                      photoWidth: size.height * 0.77,
+                      clipRadius: size.height * 0.02,
+                      containerHeight: size.height * 0.3,
+                      containerWidth: size.width * 0.9,
+                      photoUrl: 'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'),
+              )
+              :
+              GestureDetector(
+                onTap: () async {
+                  FilePickerResult pickerResult = await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                  if (pickerResult != null) {
+                    setState(() {
+                      photo =  pickerResult.files.first;
+                      myFile = File(photo.path);
+                        print(photo.path);
+                    });
+                  }
+                },
+                child: photo != null
+                ? 
+                Container( 
+                  padding: const EdgeInsets.all(3.3),
+                 // height: size.height * 0.57,
+                  width: size.height * 0.77,
+                  child: Image.file(myFile),)
+                  : 
+                  Container(
+                    padding: const EdgeInsets.all(3.3),
+                    width: size.height * 0.77,
+                    child: FadeInImage.assetNetwork(
+                      //fit:BoxFit.fill ,
+                      width:size.height * 0.77,
+                      placeholder:'assets/ball-1s-200px.gif',
+                      image: widget.userProfile.photo),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    genderWidget(
-                        FontAwesomeIcons.venus, "Female", size, gender,
-                        () {
-                      setState(() {
-                        gender = "Female";
-                      });
-                    }),
-                    genderWidget(
-                        FontAwesomeIcons.mars, "Male", size, gender, () {
-                      setState(() {
-                        gender = "Male";
-                      });
-                    }),
-                    genderWidget(
-                      FontAwesomeIcons.transgender,
-                      "Transgender",
-                      size,
-                      gender,
-                      () {
-                        setState(
-                          () {
-                            gender = "Transgender";
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(height: size.height * 0.02),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: size.height * 0.02),
-                  child: Text(
-                    "Looking For",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: size.width * 0.09),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              ),
+            ) ,
 
-                  children: [
-                    genderWidget(FontAwesomeIcons.venus, "Female", size,
-                        interestedIn, () {
-                      setState(() {
-                        interestedIn = "Female";
-                      });
-                    }),
-                    genderWidget(
-                        FontAwesomeIcons.mars, "Male", size, interestedIn,
-                        () {
-                      setState(() {
-                        interestedIn = "Male";
-                      });
-                    }),
-                    genderWidget(
-                      FontAwesomeIcons.transgender,
-                      "Transgender",
-                      size,
-                      interestedIn,
-                      () {
-                        setState(
-                          () {
-                            interestedIn = "Transgender";
-                          },
-                        );
-                      },
+            Padding(
+              padding: EdgeInsets.all(size.height * 0.03),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  textFieldWidget(widget.userProfile != null ? widget.userProfile.name: 'null' , size),
+                  SizedBox(height: size.height * 0.01),
+                  FormSubmitButton(
+                    text: widget.userProfile == null ? "생일을 입력해주세요" : '생일 : ${widget.userProfile.age.toString()}',
+                    //disabledColor: Colors.grey,
+                    
+                    onPressed: widget.userProfile == null ? (){  
+                      DatePicker.showDatePicker(
+                        context,
+                        showTitleActions: true,
+                        minTime: DateTime(1900, 1, 1),
+                        maxTime: DateTime(DateTime.now().year - 19, 1, 1),
+                        onConfirm: (date) {
+                          setState(() {
+                            age = date;
+                          });
+                          print(age);
+                        },
+                      ); 
+                    }: null ,
+                  ),
+                  Divider(height: 30,thickness: 1, color: Theme.of(context).accentColor),
+                  Text(
+                    "내 성별",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: size.width * 0.07),
+                  ),
+                  ChipsChoice<String>.single(
+                    padding: EdgeInsets.all(0),
+                    value: widget.userProfile != null ? widget.userProfile.gender : gender, 
+                    itemConfig: ChipsChoiceItemConfig(
+                      labelStyle: TextStyle(
+                      fontSize: 20
                     ),
-                  ],
-                ),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: FormSubmitButton(
-                     text: '저장',onPressed: _submit,),
+                    selectedBrightness: Brightness.dark,
+                          ),
+                    options: <ChipsChoiceOption<String>>[
+                      ChipsChoiceOption<String>(value: 'Male', label: '남성'),
+                      ChipsChoiceOption<String>(value: 'Female', label: '여성'),
+                      ChipsChoiceOption<String>(value: "Transgender", label: '모든사람'),
+                    ],
+                  onChanged: (val) => setState(() => gender = val)
+                  ),
+                  Divider(height: 30, thickness: 1, color: Theme.of(context).accentColor),
+                  Text(
+                    "상대의 성별",
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: size.width * 0.07),
+                  ),
+                  ChipsChoice<String>.single(
+                    padding: EdgeInsets.all(0),
+                    value: widget.userProfile != null ? widget.userProfile.interestedIn : interestedIn, 
+                    itemConfig: ChipsChoiceItemConfig(
+                            labelStyle: TextStyle(
+                      fontSize: 20
                     ),
+                    selectedBrightness: Brightness.dark,
+                          ),
+                    options: <ChipsChoiceOption<String>>[
+                      ChipsChoiceOption<String>(value: 'Male', label: '남성'),
+                      ChipsChoiceOption<String>(value: 'Female', label: '여성'),
+                      ChipsChoiceOption<String>(value: "Transgender", label: '모든사람'),
+                    ],
+                  isWrapped: true,
+                  onChanged: (val) => setState(() => interestedIn = val),
+                  ),  
+                ],
+              ),
+            ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: FormSubmitButton(
+                    text: '저장',onPressed: _submit),
                 ),
-                
-              ],
-            )
+              ),      
           ],
-        ),  
+          ),
+          ),  
+        
       ),
     );
   }
-}
-          
 
-Widget textFieldWidget(controller, text, size) {
-  return Padding(
-    padding: EdgeInsets.all(size.height * 0.02),
-    child: TextField(
-      controller: controller,
+  Widget textFieldWidget(name, size) {
+    return TextFormField(
+      validator: (value) {
+              print('validator value: $value');
+              if (value.isEmpty) {
+                return 'Enter some text';
+              } else
+                return null;
+            },
+      initialValue: name,
+      onSaved: (value) => name = value,
       decoration: InputDecoration(
-        labelText: text,
+        labelText: labelName,
         labelStyle:
-            TextStyle(color: Colors.white, fontSize: size.height * 0.03),
+            TextStyle(color: Colors.black, fontSize: size.height * 0.03),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
+          borderSide: BorderSide(color: Colors.black, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
+          borderSide: BorderSide(color: Colors.black, width: 1.0),
         ),
       ),
-    ),
-  );
-}
+    );
+  } 
+ }
+
+ 
+
+         

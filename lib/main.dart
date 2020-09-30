@@ -11,7 +11,7 @@ void main() {
   
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFF01579B),
+      statusBarColor: Color(0xFFED6A6A),
     )
   );
   runApp(MyApp());
@@ -34,7 +34,13 @@ class MyApp extends StatelessWidget { //ignore: must_be_immutable
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'lol friend',
-              theme: ThemeData(fontFamily: 'Jua'),
+              theme: ThemeData(
+                fontFamily: 'Jua',
+                brightness: Brightness.light,
+                primaryColor: Color(0xFFED6A6A),
+                accentColor: Color(0xFFA71736),
+                primarySwatch: Colors.amber,
+              ),
               home: DefaultTabController(
                 length: 3,
                 child: LandingPage(),

@@ -19,7 +19,8 @@ class LandingPage extends StatelessWidget {
           User user = snapshot.data;
           if(user == null) {
             return SignInPage.create(context);
-          } 
+          }      
+          
           return Provider<User>.value(
             value: user,
             child: MultiProvider(

@@ -13,8 +13,11 @@ import 'package:lol_friend_flutter/common_widgets/platform_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key key, this.apiService}) : super(key: key);
+  const AccountPage({Key key, this.apiService, this.user, this.database, this.userProfile}) : super(key: key);
   final APIService apiService;
+  final User user;
+  final DataBase database;
+  final UserProfile userProfile;
   
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -28,6 +31,7 @@ class _AccountPageState extends State<AccountPage> {
   Summoner _summoner;
   SummonerLeague _summonerLeague;
 
+  
   
   Future<void> _submit() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
@@ -43,8 +47,8 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {      
     final user = Provider.of<User>(context, listen: false);
     final database = Provider.of<DataBase>(context, listen: false);
-    final userProfile = Provider.of<UserProfile>(context, listen: false);
-    
+    //final userProfile = Provider.of<UserProfile>(context, listen: false);
+    //print('userProfile_accountPage: $userProfile');
     Future<void> _signOut(BuildContext context) async {
       try {
         final auth = Provider.of<AuthBase>(context, listen: false);
@@ -123,20 +127,27 @@ class _AccountPageState extends State<AccountPage> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: Icon(Icons.add),iconSize: 40.0,color: Colors.blueGrey,
-                  onPressed: (){
-                    user == null ?
-                    Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => 
-                    SignInPage.create(context)),
-                    )
-                    : 
-                    ProfilePage.show(context,
-                    user: user,
-                    database: database,
-                    userProfile: userProfile);
-                  }
+                StreamBuilder(
+                   stream: database.userProfileStream(uid: user.uid),
+                   builder: (context, snapshot) {
+                    final userProfile = snapshot.data;
+                    print('userProfile_accountPage: $userProfile');
+                    return IconButton(
+                    icon: Icon(Icons.add),iconSize: 40.0,color: Colors.blueGrey,
+                    onPressed: (){
+                      user == null ?
+                      Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => 
+                      SignInPage.create(context)),
+                      )
+                      : 
+                      ProfilePage.show(context,
+                      user: user,
+                      database: database,
+                      userProfile: userProfile);
+                    }
+                  );
+                },
                 ),
                 Text('본인의 소환사 아이디를 등록해 주세요.',
                   style: TextStyle(fontSize: 15),

@@ -31,8 +31,8 @@ class SignInPage extends StatelessWidget {
       child: Consumer<ValueNotifier<bool>>(
         //isLoading 값이 변경될 때 마다 Provider를 실행해 SignInManager 에 isLoading 값 전달
         builder: (_, isLoading, __) => Provider<SignInManager>(
-          create: (_) => SignInManager(auth: auth, isLoading: isLoading,
-          context: context ),
+          //lazy: false,
+          create: (_) => SignInManager(auth: auth, isLoading: isLoading),
           //Consumer로 SignInManager 변경 시 작업 지정
           child: Consumer<SignInManager>(
             //builder는 <ValueNotifier<bool>> 변경 될 때 같이 호출 딤 /SignInPage 도 rebuild
@@ -52,6 +52,13 @@ class SignInPage extends StatelessWidget {
     ).show(context);
   }
 
+  Future<void> _signInAnonymously(BuildContext context) async {
+    try {
+      await manager.signInAnonymously();
+    } on aut.FirebaseAuthException catch (e) {
+      _showSignInError(context, e);
+    }
+  }
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
       await manager.signInWithGoogle();
@@ -136,6 +143,13 @@ class SignInPage extends StatelessWidget {
             textColor: Colors.white,
             color: Colors.teal[700],
             onPressed: () => isLoading ? null : _signInWithEmail(context),
+          ),
+          SizedBox(height: 8.0),
+          SignInButton(
+            text: '익명으로 로그인',
+            textColor: Colors.black,
+            color: Colors.lime[300],
+            onPressed: () => isLoading ? null : _signInAnonymously(context),
           ),
         ],
       ),

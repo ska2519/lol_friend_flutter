@@ -8,6 +8,7 @@ class CustomRaisedButton extends StatelessWidget {
     this.borderRadius: 2.0, //default value 설정
     this.height: 50.0,
     this.onPressed,
+    this.disabledColor,
   })  : assert(borderRadius != null),
         super(key: key);
   final Widget child;
@@ -15,6 +16,7 @@ class CustomRaisedButton extends StatelessWidget {
   final double borderRadius;
   final double height;
   final VoidCallback onPressed;
+  final Color disabledColor;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class CustomRaisedButton extends StatelessWidget {
       child: RaisedButton(
         child: child,
         color: color,
-        disabledColor: color,
+        disabledColor: disabledColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(borderRadius),

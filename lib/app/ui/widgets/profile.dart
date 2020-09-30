@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/photo.dart';
 
 Widget profileWidget(
-    {padding, photoHeight, photoWidth, clipRadius, photo, containerHeight, containerWidth, child}) {
+    {padding, photoHeight, photoWidth, clipRadius, photoUrl, containerHeight, containerWidth, child}) {
   return Padding(
     padding: EdgeInsets.all(padding),
     child: Container(
@@ -26,7 +26,7 @@ Widget profileWidget(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(clipRadius),
               child: PhotoWidget(
-                photoLink: photo,
+                photoLink: photoUrl,
               ),
             ),
           ),

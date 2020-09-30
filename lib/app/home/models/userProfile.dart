@@ -9,7 +9,7 @@ class UserProfile extends ChangeNotifier{
   String gender;
   String interestedIn;
   String photo;
-  DateTime age;
+  Timestamp age;
   GeoPoint location;
   UserProfile({
     this.uid,
@@ -28,7 +28,7 @@ class UserProfile extends ChangeNotifier{
     String gender,
     String interestedIn,
     String photo,
-    DateTime age,
+    Timestamp age,
     GeoPoint location,
   }) {
     return UserProfile(
@@ -59,7 +59,7 @@ class UserProfile extends ChangeNotifier{
     final String gender = data['gender'];
     final String interestedIn = data['interestedIn'];
     final String photo = data['photoUrl'];
-    final DateTime age = data['age'].toDate();
+    final Timestamp age = data['age'];
     final GeoPoint location = data['location'];
 
     if (data == null) return null;

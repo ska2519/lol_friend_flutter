@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lol_friend_flutter/app/home/account/profile_page.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
 import 'package:lol_friend_flutter/app/services/database.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/profile.dart';
 import 'package:provider/provider.dart';
 import 'package:lol_friend_flutter/app/repositories/searchRepository.dart';
-
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key key, this.database}) : super(key: key);
@@ -22,7 +22,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMixin<SearchPage>{
   bool keepAlive = false;
   final SearchRepository _searchRepository = SearchRepository();
-  UserProfile userProfile, user;
+  UserProfile userProfile,randomProfile, user;
   int difference;
 
     
@@ -37,13 +37,31 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-   getUserProfile() async {
-   
+   Future getUserProfile() async {
     final user = Provider.of<User>(context, listen: false);
-    userProfile = await _searchRepository.getUserProfile(user.uid);
-     setState(() {
-      print('userProfile1 = $userProfile');
-     });
+    final database = Provider.of<DataBase>(context, listen: false);
+    bool isNotFirstTime = await database.isNotFirstTime(user.uid);
+    
+      if(!isNotFirstTime){
+      ProfilePage.show(context,
+                    user: user,
+                    database: database);
+      }
+      if(isNotFirstTime){
+        print('user.uid1 : ${user.uid}');
+        randomProfile = await _searchRepository.getUserProfile(user.uid);
+        print('userProfile0 : $randomProfile');
+          if (randomProfile == null) {
+          print('userProfile Null : $randomProfile');
+            return null;
+          }else{
+          print('userProfile1 = $randomProfile');
+          setState(() {
+            userProfile = randomProfile;
+          });
+        }
+      }
+    
   }
 
   Future<int> getDifference(GeoPoint userLocation) async {
@@ -66,20 +84,24 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context)  {
     super.build(context);
     final user = Provider.of<User>(context, listen: false);
-    //final userProfile = Provider.of<UserProfile>(context, listen: false);
     Size size = MediaQuery.of(context).size;
     int difference;
-    //UserProfile userProfile;
   print('userProfile2 = $userProfile');
     print('int difference = $difference');
     return Column( 
       mainAxisAlignment: MainAxisAlignment.start,
         children: [   
-           
+              userProfile == null ? 
+              Container(
+                padding:EdgeInsets.all(3.3),
+                height:size.height * 0.77,
+                child: Image.asset('assets/loading_cat.gif'),
+              ):
               profileWidget(
                   padding: 3.3,
                   photoHeight: size.height * 0.77,
-                  photo: userProfile.photo != null ? userProfile.photo : 'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+                  photoUrl: 
+                  userProfile.photo == null ? 'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80' : userProfile.photo,
                   clipRadius: size.height * 0.02,
                   containerHeight: size.height * 0.3,
                   containerWidth: size.width * 0.9,
@@ -93,8 +115,8 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
                           children:[
                             Expanded(
                               child: Text(
-                                userProfile.name != null ? userProfile.name :
-                                  '오미드 아르민',
+                                userProfile.name == null ? '오미드 아르민' :
+                                userProfile.name,
                                   style: GoogleFonts.jua(
                                     textStyle:TextStyle(
                                       color: Colors.white,
@@ -124,7 +146,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
                             )
                           ],
                         ),
-                        SizedBox(height: size.height * 0.01), 
+                        
                       ],
                     ),
                   ),
@@ -132,6 +154,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
               
             
             //Card(child: Placeholder(fallbackHeight: size.height * 0.17)),
+            SizedBox(height: size.height * 0.01), 
             Container(
               height: size.height * 0.11,
               child: Row(
@@ -169,7 +192,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
                 Ink(
                   height: size.height * 0.085,
                   child: RawMaterialButton(
-                    onPressed: () async => await chooseUser(user),
+                    onPressed: ()  =>  chooseUser(user),
                     elevation: 2.0,
                     fillColor: Colors.white,
                     shape: CircleBorder(),
@@ -189,7 +212,7 @@ class _SearchPageState extends State<SearchPage> with AutomaticKeepAliveClientMi
   }
 
     chooseUser (User user) async {
-    UserProfile nextUserProfile = await _searchRepository.chooseUser(user.uid, userProfile.uid, userProfile. name, userProfile.photo);
+    UserProfile nextUserProfile = await _searchRepository.chooseUser(user.uid, userProfile.uid, userProfile.name, userProfile.photo);
     setState(() {
        userProfile = nextUserProfile;
     });

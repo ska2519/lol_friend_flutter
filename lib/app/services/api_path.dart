@@ -6,6 +6,7 @@ class APIPath {
       '/users/$uid/entries/$entryId';
   static String entries(String uid) => '/users/$uid/entries';
 
-  static String userProfile(String user) => '/users/$user/entries';
+  static String userProfile(String uid) => '/users/$uid/';
   static String userProfiles() => '/users';
+
 }
