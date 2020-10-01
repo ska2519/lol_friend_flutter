@@ -97,9 +97,9 @@ class _SearchPageState extends State<SearchPage>
             : profileWidget(
                 padding: 3.3,
                 photoHeight: size.height * 0.75,
-                photoUrl: userProfile.photo == null
+                photoUrl: userProfile.photoUrl == null
                     ? 'https://images.unsplash.com/photo-1559637621-d766677659e8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'
-                    : userProfile.photo,
+                    : userProfile.photoUrl,
                 clipRadius: size.height * 0.02,
                 containerHeight: size.height * 0.3,
                 containerWidth: size.width * 0.9,
@@ -202,14 +202,14 @@ class _SearchPageState extends State<SearchPage>
     final database = Provider.of<DataBase>(context, listen: false);
     print('database: $database');
     UserProfile currentUser = await database.getUserProfile(uid: user.uid);
-    print('currentUser.photo: ${currentUser}');
+    print('currentUser.photo: $currentUser');
     UserProfile nextUserProfile = await _searchRepository.chooseUser(
         user.uid,
         currentUser.name,
-        currentUser.photo,
+        currentUser.photoUrl,
         userProfile.uid,
         userProfile.name,
-        userProfile.photo);
+        userProfile.photoUrl);
     setState(() {
       userProfile = nextUserProfile;
     });

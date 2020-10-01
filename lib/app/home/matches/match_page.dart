@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lol_friend_flutter/app/home/message/messaging_page.dart';
 import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 import 'package:lol_friend_flutter/app/repositories/matchesRepository.dart';
 import 'package:lol_friend_flutter/app/services/auth.dart';
@@ -36,7 +37,7 @@ class _MatchPageState extends State<MatchPage> {
             backgroundColor: Colors.white,
             title: Text(
               '매칭 유저',
-              style: TextStyle(color: Colors.black, fontSize: 0.0),
+              style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
           ),
           StreamBuilder<QuerySnapshot>(
@@ -69,21 +70,10 @@ class _MatchPageState extends State<MatchPage> {
                             currentUser = await matchesRepository
                                 .getUserDetails(user.uid);
                             print('currentUser: $currentUser');
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) => Dialog(
-                                backgroundColor: Colors.black,
-                                child: profileWidget(
-                                  photoUrl: matchedUser.photo,
-                                  padding: size.height * 0.01,
-                                  photoHeight: size.height,
-                                  photoWidth: size.width,
-                                  containerHeight: size.height * 0.02,
-                                  containerWidth: size.width,
-                                  clipRadius: size.height * 0.01,
-                                ),
-                              ),
-                            );
+
+                            MessagingPage.show(context,
+                                currentUser: currentUser,
+                                selectedUser: matchedUser);
                           },
                           child: Column(
                             children: [
@@ -116,8 +106,8 @@ class _MatchPageState extends State<MatchPage> {
             backgroundColor: Colors.white,
             pinned: true,
             title: Text(
-              "Someone Likes You",
-              style: TextStyle(color: Colors.black, fontSize: 30),
+              "메시지",
+              style: TextStyle(color: Colors.black, fontSize: 18),
             ),
           ),
         ],

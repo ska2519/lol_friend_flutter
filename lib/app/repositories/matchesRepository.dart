@@ -4,6 +4,14 @@ import 'package:lol_friend_flutter/app/home/models/userProfile.dart';
 class MatchesRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Stream<QuerySnapshot> getChatList(uid) {
+    return _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('matchedList')
+        .snapshots();
+  }
+
   Stream<QuerySnapshot> getMatchedList(uid) {
     return _firestore
         .collection('users')
@@ -26,7 +34,7 @@ class MatchesRepository {
     await _firestore.collection('users').doc(uid).get().then((user) async {
       _userProfile.uid = user.id;
       _userProfile.name = user.get('name');
-      _userProfile.photo = user.get('photoUrl');
+      _userProfile.photoUrl = user.get('photoUrl');
       _userProfile.age = user.get('age');
       _userProfile.location = user.get('location');
       _userProfile.gender = user.get('gender');

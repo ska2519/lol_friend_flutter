@@ -8,7 +8,7 @@ class UserProfile extends ChangeNotifier {
   String name;
   String gender;
   String interestedIn;
-  String photo;
+  String photoUrl;
   Timestamp age;
   GeoPoint location;
   UserProfile({
@@ -16,7 +16,7 @@ class UserProfile extends ChangeNotifier {
     this.name,
     this.gender,
     this.interestedIn,
-    this.photo,
+    this.photoUrl,
     this.age,
     this.location,
   });
@@ -26,7 +26,7 @@ class UserProfile extends ChangeNotifier {
     String name,
     String gender,
     String interestedIn,
-    String photo,
+    String photoUrl,
     Timestamp age,
     GeoPoint location,
   }) {
@@ -35,7 +35,7 @@ class UserProfile extends ChangeNotifier {
       name: name ?? this.name,
       gender: gender ?? this.gender,
       interestedIn: interestedIn ?? this.interestedIn,
-      photo: photo ?? this.photo,
+      photoUrl: photoUrl ?? this.photoUrl,
       age: age ?? this.age,
       location: location ?? this.location,
     );
@@ -47,7 +47,7 @@ class UserProfile extends ChangeNotifier {
       'name': name,
       'gender': gender,
       'interestedIn': interestedIn,
-      'photo': photo,
+      'photoUrl': photoUrl,
       'age': age,
       'location': location,
     };
@@ -57,7 +57,7 @@ class UserProfile extends ChangeNotifier {
     final String name = data['name'];
     final String gender = data['gender'];
     final String interestedIn = data['interestedIn'];
-    final String photo = data['photoUrl'];
+    final String photoUrl = data['photoUrlUrl'];
     final Timestamp age = data['age'];
     final GeoPoint location = data['location'];
 
@@ -68,7 +68,7 @@ class UserProfile extends ChangeNotifier {
       name: name,
       gender: gender,
       interestedIn: interestedIn,
-      photo: photo,
+      photoUrl: photoUrl,
       age: age,
       location: location,
     );
@@ -78,7 +78,7 @@ class UserProfile extends ChangeNotifier {
 
   @override
   String toString() {
-    return 'UserProfile(uid: $uid, name: $name, gender: $gender, interestedIn: $interestedIn, photo: $photo, age: $age, location: $location)';
+    return 'UserProfile(uid: $uid, name: $name, gender: $gender, interestedIn: $interestedIn, photoUrl: $photoUrl, age: $age, location: $location)';
   }
 
   @override
@@ -90,7 +90,7 @@ class UserProfile extends ChangeNotifier {
         o.name == name &&
         o.gender == gender &&
         o.interestedIn == interestedIn &&
-        o.photo == photo &&
+        o.photoUrl == photoUrl &&
         o.age == age &&
         o.location == location;
   }
@@ -101,7 +101,7 @@ class UserProfile extends ChangeNotifier {
         name.hashCode ^
         gender.hashCode ^
         interestedIn.hashCode ^
-        photo.hashCode ^
+        photoUrl.hashCode ^
         age.hashCode ^
         location.hashCode;
   }

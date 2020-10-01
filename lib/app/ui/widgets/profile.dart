@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lol_friend_flutter/app/ui/widgets/photo.dart';
 
 Widget profileWidget(
-    {padding, photoHeight, photoWidth, clipRadius, photoUrl, containerHeight, containerWidth, child}) {
+    {padding,
+    photoHeight,
+    photoWidth,
+    clipRadius,
+    photoUrl,
+    containerHeight,
+    containerWidth,
+    child}) {
   return Padding(
     padding: EdgeInsets.all(padding),
     child: Container(
@@ -32,26 +39,22 @@ Widget profileWidget(
           ),
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    Colors.black54,
-                    Colors.black87,
-                    Colors.black
-                  ],
-                  stops: [
-                    2.1,
-                    0.2,
-                    0.4,
-                    0.9
-                  ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter),
-              color: Colors.black45,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(clipRadius),
-                bottomRight: Radius.circular(clipRadius),
-              )),
+                gradient: LinearGradient(colors: [
+                  Colors.transparent,
+                  Colors.black54,
+                  Colors.black87,
+                  Colors.black
+                ], stops: [
+                  2.1,
+                  0.2,
+                  0.4,
+                  0.9
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+                color: Colors.black45,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(clipRadius),
+                  bottomRight: Radius.circular(clipRadius),
+                )),
             width: containerWidth,
             height: containerHeight,
             child: child,

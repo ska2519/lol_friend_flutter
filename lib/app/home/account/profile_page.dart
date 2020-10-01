@@ -183,7 +183,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     //fit:BoxFit.fill ,
                                     width: size.height * 0.77,
                                     placeholder: 'assets/ball-1s-200px.gif',
-                                    image: widget.userProfile.photo),
+                                    image: widget.userProfile.photoUrl),
                               ),
                       ),
               ),
